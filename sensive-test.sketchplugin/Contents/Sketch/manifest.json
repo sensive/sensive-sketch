@@ -1,0 +1,31 @@
+{
+  "compatibleVersion": 3,
+  "bundleVersion": 2,
+  "icon": "icon.png",
+  "commands": [
+    {
+      "name": "My Action Listener",
+      "script": "my-command.js",
+      "handlers": {
+        "actions": {
+          "DocumentSaved": "onDocumentSaved",
+          "ArtboardChanged": "onArtboardChanged"
+        }
+      },
+      "identifier": "my-command-identifier"
+    }
+  ],
+  "menu": {
+    "title": "sensive-test",
+    "items": [
+      "my-command-identifier"
+    ]
+  },
+  "version": "0.1.0",
+  "name": "sensive-test",
+  "identifier": "sensive-test",
+  "disableCocoaScriptPreprocessor": true,
+  "appcast": "https://raw.githubusercontent.com//master/.appcast.xml",
+  "author": "Rolando Murillo",
+  "authorEmail": "rolando@bandd.co"
+}

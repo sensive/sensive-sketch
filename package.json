@@ -1,0 +1,33 @@
+{
+  "name": "sensive-test",
+  "version": "0.1.0",
+  "engines": {
+    "sketch": ">=3.0"
+  },
+  "skpm": {
+    "name": "sensive-test",
+    "manifest": "src/manifest.json",
+    "main": "sensive-test.sketchplugin",
+    "assets": [
+      "assets/**/*"
+    ]
+  },
+  "scripts": {
+    "build": "skpm-build",
+    "watch": "skpm-build --watch",
+    "start": "skpm-build --watch --run",
+    "postinstall": "npm run build && skpm-link"
+  },
+  "devDependencies": {
+    "@skpm/builder": "^0.5.2"
+  },
+  "author": "Rolando Murillo <rolando@bandd.co>",
+  "dependencies": {
+    "@skpm/buffer": "^0.1.0",
+    "@skpm/fs": "^0.1.4",
+    "aws-amplify": "^1.0.6",
+    "buffer": "^5.2.0",
+    "form-data": "^2.3.2",
+    "kraken": "^0.4.0"
+  }
+}
