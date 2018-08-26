@@ -4,21 +4,26 @@
   "icon": "icon.png",
   "commands": [
     {
-      "name": "My Action Listener",
+      "name": "Toggle Syncing For This Document",
+      "script": "toggle-syncing.js",
+      "identifier": "toggle-syncing",
+      "handler": "toggleSyncing"
+    },
+    {
+      "identifier": "sync-changes",
       "script": "my-command.js",
       "handlers": {
         "actions": {
           "DocumentSaved": "onDocumentSaved",
           "ArtboardChanged": "onArtboardChanged"
         }
-      },
-      "identifier": "my-command-identifier"
+      }
     }
   ],
   "menu": {
-    "title": "sensive-test",
+    "title": "📸 Sensive",
     "items": [
-      "my-command-identifier"
+      "toggle-syncing"
     ]
   },
   "version": "0.1.0",
