@@ -4,11 +4,11 @@ const Settings = require('sketch/settings')
 export function onDocumentSaved(context) {
   const activeArtboard = context.actionContext.document.findCurrentArtboardGroup()
   
-  const sendSnapshot = (imageURL) => {
+  const sendSnapshot = (imageURL, artboard) => {
     const document = context.actionContext.document
     
-    const artboardName = String(activeArtboard.name())
-    const artboardUid = String(activeArtboard.objectID())
+    const artboardName = String(artboard.name())
+    const artboardUid = String(artboard.objectID())
     const documentName = String(document.cloudName().toString())
     const documentUid = String(document.cloudDocumentKey())
     
@@ -38,17 +38,17 @@ export function onDocumentSaved(context) {
   }
   
   const exportImage = (artboard, callback) => {
-    // let slice = MSExportRequest.exportRequestsFromExportableLayer(artboard).firstObject()
-    // slice.scale = 1
-    // slice.saveForWeb = false
-    // slice.format = "png"
-    const filename = `/tmp/${artboard.name()}.png`
-    context.actionContext.document.saveArtboardOrSlice_toFile(artboard, filename)
+    const filename = `/tmp/${artboard.objectID()}.png`
+    const slice = MSExportRequest.exportRequestsFromExportableLayer(artboard).firstObject()
+    slice.scale = 1
+    slice.saveForWeb = false
+    slice.format = "png"
+    context.actionContext.document.saveArtboardOrSlice_toFile(slice, filename)
     console.log(filename)
     setTimeout(() => callback(filename), 500)
   }
 
-  const uploadImage = (url) => (fullpathFilename) => {
+  const uploadImage = (url, artboard) => (fullpathFilename) => {
     const file = NSData.alloc().initWithContentsOfFile(fullpathFilename)
 
 
@@ -63,14 +63,22 @@ export function onDocumentSaved(context) {
       body: file
     }).then(response => {
       const imageURL = JSON.parse(response.text()._value).url
-      sendSnapshot(imageURL)
+      sendSnapshot(imageURL, artboard)
     }).then(text => {
       // console.log(text)
     }).catch(e => console.log(e))
   }
 
   if (Settings.documentSettingForKey(context.actionContext.document, 'trackDocument') === true){
-    exportImage(activeArtboard, uploadImage("http://localhost:3000/api/images/upload"))
+    exportImage(activeArtboard, uploadImage("http://localhost:3000/api/images/upload", activeArtboard))
+    // const document = context.actionContext.document
+    // document.pages().forEach((page) => {
+    //   page.artboards().forEach((artboard) => {
+    //     new Promise((resolve, reject) => {
+    //       exportImage(artboard, uploadImage("http://localhost:3000/api/images/upload", artboard))
+    //     })
+    //   })
+    // })
   }
 }
 

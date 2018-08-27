@@ -865,10 +865,10 @@ var Settings = __webpack_require__(/*! sketch/settings */ "sketch/settings");
 function onDocumentSaved(context) {
   var activeArtboard = context.actionContext.document.findCurrentArtboardGroup();
 
-  var sendSnapshot = function sendSnapshot(imageURL) {
+  var sendSnapshot = function sendSnapshot(imageURL, artboard) {
     var document = context.actionContext.document;
-    var artboardName = String(activeArtboard.name());
-    var artboardUid = String(activeArtboard.objectID());
+    var artboardName = String(artboard.name());
+    var artboardUid = String(artboard.objectID());
     var documentName = String(document.cloudName().toString());
     var documentUid = String(document.cloudDocumentKey());
     console.log('artboardName:', artboardName);
@@ -900,19 +900,19 @@ function onDocumentSaved(context) {
   };
 
   var exportImage = function exportImage(artboard, callback) {
-    // let slice = MSExportRequest.exportRequestsFromExportableLayer(artboard).firstObject()
-    // slice.scale = 1
-    // slice.saveForWeb = false
-    // slice.format = "png"
-    var filename = "/tmp/".concat(artboard.name(), ".png");
-    context.actionContext.document.saveArtboardOrSlice_toFile(artboard, filename);
+    var filename = "/tmp/".concat(artboard.objectID(), ".png");
+    var slice = MSExportRequest.exportRequestsFromExportableLayer(artboard).firstObject();
+    slice.scale = 1;
+    slice.saveForWeb = false;
+    slice.format = "png";
+    context.actionContext.document.saveArtboardOrSlice_toFile(slice, filename);
     console.log(filename);
     setTimeout(function () {
       return callback(filename);
     }, 500);
   };
 
-  var uploadImage = function uploadImage(url) {
+  var uploadImage = function uploadImage(url, artboard) {
     return function (fullpathFilename) {
       var file = NSData.alloc().initWithContentsOfFile(fullpathFilename);
       context.actionContext.document.showMessage("Sending changes to Sensive…");
@@ -925,7 +925,7 @@ function onDocumentSaved(context) {
         body: file
       }).then(function (response) {
         var imageURL = JSON.parse(response.text()._value).url;
-        sendSnapshot(imageURL);
+        sendSnapshot(imageURL, artboard);
       }).then(function (text) {// console.log(text)
       }).catch(function (e) {
         return console.log(e);
@@ -934,7 +934,14 @@ function onDocumentSaved(context) {
   };
 
   if (Settings.documentSettingForKey(context.actionContext.document, 'trackDocument') === true) {
-    exportImage(activeArtboard, uploadImage("http://localhost:3000/api/images/upload"));
+    exportImage(activeArtboard, uploadImage("http://localhost:3000/api/images/upload", activeArtboard)); // const document = context.actionContext.document
+    // document.pages().forEach((page) => {
+    //   page.artboards().forEach((artboard) => {
+    //     new Promise((resolve, reject) => {
+    //       exportImage(artboard, uploadImage("http://localhost:3000/api/images/upload", artboard))
+    //     })
+    //   })
+    // })
   }
 }
 function onArtboardChanged(context) {// log(context)
