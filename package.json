@@ -1,5 +1,8 @@
 {
-  "name": "sensive-test",
+  "name": "Sensive for Skektch",
+  "description": "Sync your .sketch documents with your Sensive account.",
+  "author": "Sensive Team <help@sensive.co>",
+  "repository": "git@github.com:rnmp/sensive-sketch.git",
   "version": "0.1.0",
   "engines": {
     "sketch": ">=3.0"
@@ -21,7 +24,6 @@
   "devDependencies": {
     "@skpm/builder": "^0.5.2"
   },
-  "author": "Rolando Murillo <rolando@bandd.co>",
   "dependencies": {
     "@skpm/buffer": "^0.1.0",
     "@skpm/fs": "^0.1.4",

@@ -874,12 +874,13 @@ function onDocumentSaved(context) {
     console.log('artboardName:', artboardName);
     console.log('artboardUid:', artboardUid);
     console.log('documentName:', documentName);
-    console.log('documentUid:', documentUid);
-    fetch('http://localhost:3000/api/snapshots/sketch/', {
+    console.log('documentUid:', documentUid); // TODO: documentUid is not really unique between duplicate files
+
+    fetch('http://localhost:5000/api/snapshots/sketch/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-User-Application-Token': 'def37cf2c791b7a766edbde95fa14694'
+        'X-User-Application-Token': Settings.settingForKey('userApplicationToken')
       },
       body: JSON.stringify({
         snapshot: {
@@ -920,7 +921,7 @@ function onDocumentSaved(context) {
         method: 'POST',
         headers: {
           'Content-Type': 'image/png',
-          'X-User-Application-Token': 'def37cf2c791b7a766edbde95fa14694'
+          'X-User-Application-Token': Settings.settingForKey('userApplicationToken')
         },
         body: file
       }).then(function (response) {
@@ -934,11 +935,11 @@ function onDocumentSaved(context) {
   };
 
   if (Settings.documentSettingForKey(context.actionContext.document, 'trackDocument') === true) {
-    exportImage(activeArtboard, uploadImage("http://localhost:3000/api/images/upload", activeArtboard)); // const document = context.actionContext.document
+    exportImage(activeArtboard, uploadImage("http://localhost:5000/api/images/upload", activeArtboard)); // const document = context.actionContext.document
     // document.pages().forEach((page) => {
     //   page.artboards().forEach((artboard) => {
     //     new Promise((resolve, reject) => {
-    //       exportImage(artboard, uploadImage("http://localhost:3000/api/images/upload", artboard))
+    //       exportImage(artboard, uploadImage("http://localhost:5000/api/images/upload", artboard))
     //     })
     //   })
     // })

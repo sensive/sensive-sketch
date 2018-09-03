@@ -10,6 +10,12 @@
       "handler": "toggleSyncing"
     },
     {
+      "name": "Setup…",
+      "script": "setup.js",
+      "identifier": "setup",
+      "handler": "setup"
+    },
+    {
       "identifier": "sync-changes",
       "script": "my-command.js",
       "handlers": {
@@ -23,7 +29,8 @@
   "menu": {
     "title": "🛎 Sensive",
     "items": [
-      "toggle-syncing"
+      "toggle-syncing",
+      "setup"
     ]
   },
   "version": "0.1.0",

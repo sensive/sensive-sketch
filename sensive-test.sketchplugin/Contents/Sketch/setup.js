@@ -86,50 +86,27 @@ var exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/toggle-syncing.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/setup.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/toggle-syncing.js":
-/*!*******************************!*\
-  !*** ./src/toggle-syncing.js ***!
-  \*******************************/
-/*! exports provided: toggleSyncing */
+/***/ "./src/setup.js":
+/*!**********************!*\
+  !*** ./src/setup.js ***!
+  \**********************/
+/*! exports provided: setup */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleSyncing", function() { return toggleSyncing; });
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setup", function() { return setup; });
 var UI = __webpack_require__(/*! sketch/ui */ "sketch/ui");
 
 var Settings = __webpack_require__(/*! sketch/settings */ "sketch/settings");
 
-function toggleSyncing(context) {
-  var toggle = function toggle() {
-    switch (Settings.documentSettingForKey(context.document, 'trackDocument')) {
-      case true:
-        Settings.setDocumentSettingForKey(context.document, 'trackDocument', false);
-        context.document.showMessage("Stopped syncing changes for ".concat(context.document.cloudName()));
-        break;
-
-      default:
-        Settings.setDocumentSettingForKey(context.document, 'trackDocument', true);
-        context.document.showMessage("Started syncing changes for ".concat(context.document.cloudName()));
-    }
-  };
-
-  if (typeof Settings.settingForKey('userApplicationToken') != 'undefined' || Settings.settingForKey('userApplicationToken') != null) {
-    console.log(_typeof(Settings.settingForKey('userApplicationToken')));
-    console.log(Settings.settingForKey('userApplicationToken'));
-    toggle();
-  } else {
-    var collectedUserApplicationToken = UI.getStringFromUser("Enter your Sensive token", '');
-    Settings.setSettingForKey('userApplicationToken', collectedUserApplicationToken);
-    toggle();
-  }
+function setup() {
+  Settings.setSettingForKey('userApplicationToken', UI.getStringFromUser("Enter your Sensive token", Settings.settingForKey('userApplicationToken')));
 }
 
 /***/ }),
@@ -163,7 +140,7 @@ module.exports = require("sketch/ui");
     exports[key](context);
   }
 }
-that['toggleSyncing'] = __skpm_run.bind(this, 'toggleSyncing');
+that['setup'] = __skpm_run.bind(this, 'setup');
 that['onRun'] = __skpm_run.bind(this, 'default')
 
-//# sourceMappingURL=toggle-syncing.js.map
+//# sourceMappingURL=setup.js.map
