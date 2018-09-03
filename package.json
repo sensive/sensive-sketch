@@ -3,7 +3,7 @@
   "description": "Sync your .sketch documents with your Sensive account.",
   "author": "Sensive Team <help@sensive.co>",
   "repository": "git@github.com:rnmp/sensive-sketch.git",
-  "version": "0.1.2",
+  "version": "0.1.3-0",
   "engines": {
     "sketch": ">=3.0"
   },
