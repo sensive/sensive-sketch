@@ -33,11 +33,12 @@
       "setup"
     ]
   },
-  "version": "0.1.0",
+  "version": "0.1.2",
+  "description": "Sync your .sketch documents with your Sensive account.",
   "name": "sensive-test",
   "identifier": "sensive-test",
   "disableCocoaScriptPreprocessor": true,
-  "appcast": "https://raw.githubusercontent.com//master/.appcast.xml",
-  "author": "Rolando Murillo",
-  "authorEmail": "rolando@bandd.co"
+  "appcast": "https://raw.githubusercontent.com/rnmp/sensive-sketch/master/.appcast.xml",
+  "author": "Sensive Team",
+  "authorEmail": "help@sensive.co"
 }
