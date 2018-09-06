@@ -19,7 +19,7 @@ export function onDocumentSaved(context) {
 
     // TODO: documentUid is not really unique between duplicate files
 
-    fetch('http://localhost:5000/api/snapshots/sketch/', {
+    fetch(`${process.env.SENSIVE_API_URL}/api/snapshots/sketch/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -55,6 +55,8 @@ export function onDocumentSaved(context) {
 
 
     context.actionContext.document.showMessage("Sending changes to Sensive…")
+
+    console.log('WHATEVER:', process.env.SENSIVE_API_URL)
     
     fetch(url, {
       method: 'POST',
@@ -72,7 +74,7 @@ export function onDocumentSaved(context) {
   }
 
   if (Settings.documentSettingForKey(context.actionContext.document, 'trackDocument') === true){
-    exportImage(activeArtboard, uploadImage("http://localhost:5000/api/images/upload", activeArtboard))
+    exportImage(activeArtboard, uploadImage(`${process.env.SENSIVE_API_URL}/api/images/upload`, activeArtboard))
     // const document = context.actionContext.document
     // document.pages().forEach((page) => {
     //   page.artboards().forEach((artboard) => {
