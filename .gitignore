@@ -1,5 +1,5 @@
 # build artifacts
-plugin.sketchplugin
+sensive-sketch.sketchplugin
 
 # npm
 node_modules

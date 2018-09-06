@@ -4,16 +4,17 @@
     "sketch": ">=3.0"
   },
   "skpm": {
-    "name": "sensive-test",
+    "name": "sensive-sketch",
     "manifest": "src/manifest.json",
-    "main": "sensive-test.sketchplugin",
+    "main": "sensive-sketch.sketchplugin",
     "assets": [
       "assets/**/*"
     ]
   },
   "scripts": {
-    "build": "skpm-build",
-    "watch": "skpm-build --watch",
+    "build": "SENSIVE_API_URL=https://sensive.co skpm-build",
+    "build:staging": "SENSIVE_API_URL=https://staging.sensive.co skpm-build",
+    "watch": "SENSIVE_API_URL=http://localhost:5000 skpm-build --watch",
     "start": "skpm-build --watch --run",
     "postinstall": "npm run build && skpm-link"
   },
