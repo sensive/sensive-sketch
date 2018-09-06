@@ -1,80 +1,75 @@
 const fetch = require('sketch-polyfill-fetch')
 const Settings = require('sketch/settings')
+const exportImage = require('export-image')
 
-export function onDocumentSaved(context) {
-  const activeArtboard = context.actionContext.document.findCurrentArtboardGroup()
+const trackingEnabled = (document) => Settings.documentSettingForKey(document, 'trackDocument') === true
+
+const sendSnapshot = (imageURL, artboard) => {
+  const { document } = context.actionContext
   
-  const sendSnapshot = (imageURL, artboard) => {
-    const document = context.actionContext.document
-    
-    const artboardName = String(artboard.name())
-    const artboardUid = String(artboard.objectID())
-    const documentName = String(document.cloudName().toString())
-    const documentUid = String(document.cloudDocumentKey())
-    
-    console.log('artboardName:', artboardName)
-    console.log('artboardUid:', artboardUid)
-    console.log('documentName:', documentName)
-    console.log('documentUid:', documentUid)
+  const artboardName = String(artboard.name())
+  const artboardUid = String(artboard.objectID())
+  const documentName = String(document.cloudName().toString())
+  const documentUid = String(document.cloudDocumentKey())
+  
+  console.log('artboardName:', artboardName)
+  console.log('artboardUid:', artboardUid)
+  console.log('documentName:', documentName)
+  console.log('documentUid:', documentUid)
 
-    // TODO: documentUid is not really unique between duplicate files
+  // TODO: documentUid is not really unique between duplicate files
 
-    fetch(`${process.env.SENSIVE_API_URL}/api/snapshots/sketch/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-User-Application-Token': Settings.settingForKey('userApplicationToken'),
+  fetch(`${process.env.SENSIVE_API_URL}/api/snapshots/sketch/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-User-Application-Token': Settings.settingForKey('userApplicationToken'),
+    },
+    body: JSON.stringify({
+      snapshot: {
+        artboard_name: artboardName,
+        artboard_uid: artboardUid,
+        document_name: documentName,
+        document_uid: documentUid,
+        url: imageURL,
       },
-      body: JSON.stringify({
-        snapshot: {
-          artboard_name: artboardName,
-          artboard_uid: artboardUid,
-          document_name: documentName,
-          document_uid: documentUid,
-          url: imageURL,
-        },
-      })
-    }).then(response => { console.log(response) }).then(text => {
-      context.actionContext.document.showMessage("Done!")
-    }).catch(e => console.log(e))
-  }
-  
-  const exportImage = (artboard, callback) => {
-    const filename = `/tmp/${artboard.objectID()}.png`
-    const slice = MSExportRequest.exportRequestsFromExportableLayer(artboard).firstObject()
-    slice.scale = 1
-    slice.saveForWeb = false
-    slice.format = "png"
-    context.actionContext.document.saveArtboardOrSlice_toFile(slice, filename)
-    console.log(filename)
-    setTimeout(() => callback(filename), 500)
-  }
+    })
+  }).then(response => { console.log(response) }).then(text => {
+    context.actionContext.document.showMessage("Done!")
+  }).catch(e => console.log(e))
+}
 
-  const uploadImage = (url, artboard) => (fullpathFilename) => {
-    const file = NSData.alloc().initWithContentsOfFile(fullpathFilename)
+const uploadImage = (artboard, filepath) => {
+  const { document } = context.actionContext
+  const imageFile = NSData.alloc().initWithContentsOfFile(filepath)
+  const imageChanged = () => Settings.documentSettingForKey(document, `SIZE-${artboard.objectID()}`) != imageFile.length()
 
-
-    context.actionContext.document.showMessage("Sending changes to Sensive…")
-
-    console.log('WHATEVER:', process.env.SENSIVE_API_URL)
+  if (imageChanged()){
+    document.showMessage("Syncing with Sensive…")
     
-    fetch(url, {
+    fetch(`${process.env.SENSIVE_API_URL}/api/images/upload`, {
       method: 'POST',
       headers: {
         'Content-Type': 'image/png',
         'X-User-Application-Token': Settings.settingForKey('userApplicationToken'),
       },
-      body: file
+      body: imageFile
     }).then(response => {
-      const imageURL = JSON.parse(response.text()._value).url
-      sendSnapshot(imageURL, artboard)
-    }).then(text => {
-      // console.log(text)
+      const { url } = JSON.parse(response.text()._value)
+      sendSnapshot(url, artboard)
     }).catch(e => console.log(e))
-  }
 
-  if (Settings.documentSettingForKey(context.actionContext.document, 'trackDocument') === true){
-    exportImage(activeArtboard, uploadImage(`${process.env.SENSIVE_API_URL}/api/images/upload`, activeArtboard))
+    Settings.setDocumentSettingForKey(document, `SIZE-${artboard.objectID()}`, imageFile.length())
+  }
+}
+
+export function onDocumentSaved(context) {
+  const { document } = context.actionContext
+  const currentArtboard = document.findCurrentArtboardGroup()
+  
+  if (trackingEnabled && currentArtboard){
+    exportImage(currentArtboard, uploadImage)
+
     // const document = context.actionContext.document
     // document.pages().forEach((page) => {
     //   page.artboards().forEach((artboard) => {
@@ -85,8 +80,12 @@ export function onDocumentSaved(context) {
     // })
   }
 }
-
+      
 export function onArtboardChanged(context) {
-  // log(context)
-  // context.actionContext.document.showMessage(context.action)
+  const { document, oldArtboard, newArtboard } = context.actionContext
+  const artboardChanged = () => oldArtboard != newArtboard
+
+  if (trackingEnabled(document) && artboardChanged()){
+    exportImage(oldArtboard, uploadImage)
+  }
 }
