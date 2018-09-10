@@ -14,19 +14,12 @@ export function toggleSyncing(context) {
     }
   }
 
-  if (
-    (typeof Settings.settingForKey('userApplicationToken') != 'undefined') ||
-           (Settings.settingForKey('userApplicationToken') != null)
-  ){
-    console.log(typeof Settings.settingForKey('userApplicationToken'))
-    console.log(       Settings.settingForKey('userApplicationToken'))
-    
+  if (Settings.settingForKey('userApplicationToken')){
     toggle()
   } else {
-    let collectedUserApplicationToken = UI.getStringFromUser("Enter your Sensive token", '')
+    let collectUserApplicationToken = UI.getStringFromUser("Enter your Sensive token", '')
+    Settings.setSettingForKey('userApplicationToken', collectUserApplicationToken)
 
-    Settings.setSettingForKey('userApplicationToken', collectedUserApplicationToken)
-
-    toggle()
+    toggleSyncing(context)
   }
 }
