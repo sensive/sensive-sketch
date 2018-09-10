@@ -55,9 +55,13 @@ const uploadImage = (artboard, filepath) => {
       },
       body: imageFile
     }).then(response => {
-      const { url } = JSON.parse(response.text()._value)
-      sendSnapshot(url, artboard)
-    }).catch(e => console.log(e))
+      if(response.ok){
+        const { url } = JSON.parse(response.text()._value)
+        sendSnapshot(url, artboard)
+      } else {
+        document.showMessage(`There was an error when syncing ${artboard.name()}…`)
+      }
+    })
 
     Settings.setDocumentSettingForKey(document, `SIZE-${artboard.objectID()}`, imageFile.length())
   }
