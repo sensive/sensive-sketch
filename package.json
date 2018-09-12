@@ -1,5 +1,6 @@
 {
   "name": "sensive-sketch",
+  "repository": "git@github.com:rnmp/sensive-sketch.git",
   "engines": {
     "sketch": ">=3.0"
   },
