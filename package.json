@@ -1,5 +1,6 @@
 {
   "name": "sensive-sketch",
+  "description": "Sync your .sketch documents with your Sensive account.",
   "repository": "git@github.com:rnmp/sensive-sketch.git",
   "engines": {
     "sketch": ">=3.0"
