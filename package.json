@@ -23,5 +23,6 @@
   "devDependencies": {
     "@skpm/builder": "^0.5.2"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "version": "0.1.3-0"
 }
