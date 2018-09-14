@@ -4,7 +4,7 @@
   "author": "Sensive LLC <support@sensive.co>",
   "version": "0.1.3-1",
   "compatibleVersion": 3,
-  "bundleVersion": 2,
+  "bundleVersion": 1,
   "icon": "icon.png",
 
   "commands": [
