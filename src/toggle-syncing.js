@@ -3,15 +3,9 @@ const Settings = require('sketch/settings')
 
 export function toggleSyncing(context) {
   const toggle = () => {
-    switch (Settings.documentSettingForKey(context.document, 'trackDocument')) {
-      case true:
-        Settings.setDocumentSettingForKey(context.document, 'trackDocument', false)
-        context.document.showMessage(`Stopped syncing changes for ${context.document.cloudName()}`)
-        break;
-      default:
-        Settings.setDocumentSettingForKey(context.document, 'trackDocument', true)
-        context.document.showMessage(`Started syncing changes for ${context.document.cloudName()}`)
-    }
+    const tracking = Settings.documentSettingForKey(context.document, 'trackDocument')
+    Settings.setDocumentSettingForKey(context.document, 'trackDocument', !tracking)
+    context.document.showMessage(`${tracking ? 'Stopped' : 'Started'} syncing changes for ${context.document.cloudName()}`)
   }
 
   if (Settings.settingForKey('userApplicationToken')){
