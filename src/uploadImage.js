@@ -1,12 +1,7 @@
 const fetch = require('sketch-polyfill-fetch')
 const Settings = require('sketch/settings')
-const exportImage = require('export-image')
 
-const trackingEnabled = (document) => Settings.documentSettingForKey(document, 'trackDocument') === true
-
-const sendSnapshot = (imageURL, artboard) => {
-  const { document } = context.actionContext
-  
+const sendSnapshot = (imageURL, document, artboard) => {
   const artboardName = String(artboard.name())
   const artboardUid = String(artboard.objectID())
   const documentName = String(document.cloudName().toString())
@@ -39,8 +34,7 @@ const sendSnapshot = (imageURL, artboard) => {
   }).catch(e => console.log(e))
 }
 
-const uploadImage = (artboard, filepath) => {
-  const { document } = context.actionContext
+export default function uploadImage(document, artboard, filepath){
   const imageFile = NSData.alloc().initWithContentsOfFile(filepath)
   const imageChanged = () => Settings.documentSettingForKey(document, `SIZE-${artboard.objectID()}`) != imageFile.length()
 
@@ -57,39 +51,12 @@ const uploadImage = (artboard, filepath) => {
     }).then(response => {
       if(response.ok){
         const { url } = JSON.parse(response.text()._value)
-        sendSnapshot(url, artboard)
+        sendSnapshot(url, document, artboard)
       } else {
         document.showMessage(`There was an error when syncing ${artboard.name()}…`)
       }
     })
 
     Settings.setDocumentSettingForKey(document, `SIZE-${artboard.objectID()}`, imageFile.length())
-  }
-}
-
-export function onDocumentSaved(context) {
-  const { document } = context.actionContext
-  const currentArtboard = document.findCurrentArtboardGroup()
-  
-  if (trackingEnabled && currentArtboard){
-    exportImage(currentArtboard, uploadImage)
-
-    // const document = context.actionContext.document
-    // document.pages().forEach((page) => {
-    //   page.artboards().forEach((artboard) => {
-    //     new Promise((resolve, reject) => {
-    //       exportImage(artboard, uploadImage("http://localhost:5000/api/images/upload", artboard))
-    //     })
-    //   })
-    // })
-  }
-}
-      
-export function onArtboardChanged(context) {
-  const { document, oldArtboard, newArtboard } = context.actionContext
-  const artboardChanged = () => oldArtboard != newArtboard
-
-  if (trackingEnabled(document) && artboardChanged()){
-    exportImage(oldArtboard, uploadImage)
   }
 }

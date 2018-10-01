@@ -1,7 +1,7 @@
 {
   "name": "sensive-sketch",
   "description": "Sync your .sketch documents with your Sensive account.",
-  "repository": "git@github.com:rnmp/sensive-sketch.git",
+  "repository": "git@github.com:sensive/sensive-sketch.git",
   "engines": {
     "sketch": ">=3.0"
   },
@@ -23,6 +23,9 @@
   "devDependencies": {
     "@skpm/builder": "^0.5.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "sketch-module-web-view": "^1.2.3",
+    "skpm": "^1.1.7"
+  },
   "version": "0.3.0"
 }
