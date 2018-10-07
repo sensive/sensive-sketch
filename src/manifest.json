@@ -15,7 +15,7 @@
       "handler": "toggleSyncing"
     },
     {
-      "name": "Setup…",
+      "name": "Your Account",
       "script": "setup.js",
       "identifier": "setup",
       "handler": "setup"
@@ -29,6 +29,24 @@
           "OpenDocument": "onOpenDocument"
         }
       }
+    },
+    {
+      "name": "About Us",
+      "script": "sensiveLinks.js",
+      "identifier": "aboutUsLink",
+      "handler": "aboutUsLink"
+    },
+    {
+      "name": "Terms of Service",
+      "script": "sensiveLinks.js",
+      "identifier": "termsOfServiceLink",
+      "handler": "termsOfServiceLink"
+    },
+    {
+      "name": "Privacy Policy",
+      "script": "sensiveLinks.js",
+      "identifier": "privacyPolicyLink",
+      "handler": "privacyPolicyLink"
     }
   ],
   
@@ -36,7 +54,43 @@
     "title": "🛎 Sensive",
     "items": [
       "toggleSyncing",
-      "setup"
+      "-",
+      "setup",
+      {
+        "title": "About Sensive",
+        "items": [
+          "aboutUsLink",
+          "termsOfServiceLink",
+          "privacyPolicyLink"
+        ]
+      }
+    ]
+  }
+}     "identifier": "termsOfServiceLink",
+      "handler": "termsOfServiceLink"
+    },
+    {
+      "name": "Privacy Policy",
+      "script": "sensiveLinks.js",
+      "identifier": "privacyPolicyLink",
+      "handler": "privacyPolicyLink"
+    }
+  ],
+  
+  "menu": {
+    "title": "🛎 Sensive",
+    "items": [
+      "toggleSyncing",
+      "-",
+      "setup",
+      {
+        "title": "About Sensive",
+        "items": [
+          "aboutUsLink",
+          "termsOfServiceLink",
+          "privacyPolicyLink"
+        ]
+      }
     ]
   }
 }

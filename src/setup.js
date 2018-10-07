@@ -1,5 +1,6 @@
 const Settings = require('sketch/settings')
 import BrowserWindow from 'sketch-module-web-view'
+import openLink from './openLink.js'
 
 const windowOptions = {
   width: 800,
@@ -19,7 +20,7 @@ export function setup() {
   browserWindow.loadURL(`${process.env.SENSIVE_API_URL}/sketch/sign_in`)
 
   browserWindow.webContents.on('openLink', (link) => {
-    NSWorkspace.sharedWorkspace().openURL(NSURL.URLWithString(link))
+    openLink(link)
   })
 
   browserWindow.webContents.on('clearToken', () => {
