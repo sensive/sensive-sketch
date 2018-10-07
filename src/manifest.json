@@ -2,7 +2,7 @@
   "name": "Sketch Sync",
   "description": "Create a collaboration hub for your Sketch files.",
   "author": "Sensive",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "compatibleVersion": 3,
   "bundleVersion": 1,
   "icon": "icon.png",
