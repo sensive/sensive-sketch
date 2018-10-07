@@ -1,8 +1,8 @@
 {
-  "name": "Sensive",
-  "description": "Sync your .sketch documents with your Sensive account.",
-  "author": "Sensive LLC <support@sensive.co>",
-  "version": "0.1.3-1",
+  "name": "Sketch Sync",
+  "description": "Create a collaboration hub for your Sketch files.",
+  "author": "Sensive",
+  "version": "0.3.0",
   "compatibleVersion": 3,
   "bundleVersion": 1,
   "icon": "icon.png",
@@ -10,33 +10,60 @@
   "commands": [
     {
       "name": "Toggle Syncing For This Document",
-      "script": "toggle-syncing.js",
-      "identifier": "toggle-syncing",
+      "script": "toggleSyncing.js",
+      "identifier": "toggleSyncing",
       "handler": "toggleSyncing"
     },
     {
-      "name": "Setup…",
+      "name": "Your Account",
       "script": "setup.js",
       "identifier": "setup",
       "handler": "setup"
     },
     {
-      "identifier": "sync-changes",
-      "script": "my-command.js",
+      "script": "actions.js",
       "handlers": {
         "actions": {
           "DocumentSaved": "onDocumentSaved",
-          "ArtboardChanged": "onArtboardChanged"
+          "ArtboardChanged": "onArtboardChanged",
+          "OpenDocument": "onOpenDocument"
         }
       }
+    },
+    {
+      "name": "About Us",
+      "script": "sensiveLinks.js",
+      "identifier": "aboutUsLink",
+      "handler": "aboutUsLink"
+    },
+    {
+      "name": "Terms of Service",
+      "script": "sensiveLinks.js",
+      "identifier": "termsOfServiceLink",
+      "handler": "termsOfServiceLink"
+    },
+    {
+      "name": "Privacy Policy",
+      "script": "sensiveLinks.js",
+      "identifier": "privacyPolicyLink",
+      "handler": "privacyPolicyLink"
     }
   ],
   
   "menu": {
     "title": "🛎 Sensive",
     "items": [
-      "toggle-syncing",
-      "setup"
+      "toggleSyncing",
+      "-",
+      "setup",
+      {
+        "title": "About Sensive",
+        "items": [
+          "aboutUsLink",
+          "termsOfServiceLink",
+          "privacyPolicyLink"
+        ]
+      }
     ]
   }
 }

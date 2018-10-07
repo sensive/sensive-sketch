@@ -1,10 +1,10 @@
-module.exports = (artboard, callback) => {
+export default function exportImage(document, artboard, callback){
   const filepath = `/tmp/${artboard.objectID()}.png`
   const slice = MSExportRequest.exportRequestsFromExportableLayer(artboard).firstObject()
   slice.scale = 2
   slice.saveForWeb = false
   slice.format = "png"
-  context.actionContext.document.saveArtboardOrSlice_toFile(slice, filepath)
+  document.saveArtboardOrSlice_toFile(slice, filepath)
   console.log(filepath)
-  setTimeout(() => callback(artboard, filepath), 500)
+  setTimeout(() => callback(document, artboard, filepath), 500)
 }
