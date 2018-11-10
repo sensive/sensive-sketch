@@ -17,7 +17,7 @@
     "build": "SENSIVE_API_URL=https://sensive.co skpm-build",
     "build:staging": "SENSIVE_API_URL=https://staging.sensive.co skpm-build",
     "watch": "SENSIVE_API_URL=http://localhost:5000 skpm-build --watch",
-    "start": "skpm-build --watch --run",
+    "start": "SENSIVE_API_URL=http://localhost:5000 skpm-build --watch --run",
     "postinstall": "npm run build && skpm-link"
   },
   "devDependencies": {
