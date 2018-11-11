@@ -2,7 +2,7 @@
   "name": "Sketch Sync",
   "description": "Create a collaboration hub for your Sketch files.",
   "author": "Sensive",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "compatibleVersion": 3,
   "bundleVersion": 1,
   "icon": "icon.png",
@@ -10,6 +10,7 @@
   "commands": [
     {
       "name": "Toggle Syncing For This Document",
+      "shortcut": "ctrl y",
       "script": "toggleSyncing.js",
       "identifier": "toggleSyncing",
       "handler": "toggleSyncing"
@@ -25,7 +26,6 @@
       "handlers": {
         "actions": {
           "DocumentSaved": "onDocumentSaved",
-          "ArtboardChanged": "onArtboardChanged",
           "OpenDocument": "onOpenDocument"
         }
       }

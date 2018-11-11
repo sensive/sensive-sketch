@@ -1,25 +1,19 @@
 const Settings = require('sketch/settings')
-import exportImage from './exportImage.js'
-import uploadImage from './uploadImage.js'
+import { exportImage, uploadImage } from './utils.js'
 import { setup } from './setup.js'
-
-const trackingEnabled = (document) => Settings.documentSettingForKey(document, 'trackDocument') === true
 
 export function onDocumentSaved(context) {
   const { document } = context.actionContext
-  const currentArtboard = document.findCurrentArtboardGroup()
+  const tracking = Settings.documentSettingForKey(document, 'trackDocument')
 
-  if (trackingEnabled(document) && currentArtboard){
-    exportImage(document, currentArtboard, uploadImage)
-  }
-}
-      
-export function onArtboardChanged(context) {
-  const { document, oldArtboard, newArtboard } = context.actionContext
-  const artboardChanged = () => oldArtboard != newArtboard
-
-  if (trackingEnabled(document) && artboardChanged()){
-    exportImage(document, oldArtboard, uploadImage)
+  if (tracking) {
+    document.pages().forEach((page) => {
+      page.artboards().forEach((artboard) => {
+        if (artboard.class() != 'MSSymbolMaster') {
+          exportImage(document, artboard, uploadImage)
+        }
+      })
+    })
   }
 }
       

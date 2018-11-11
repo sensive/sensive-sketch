@@ -1,4 +1,4 @@
-export default function exportImage(document, artboard, callback){
+export function exportImage(document, artboard, callback){
   const filepath = `/tmp/${artboard.objectID()}.png`
   const slice = MSExportRequest.exportRequestsFromExportableLayer(artboard).firstObject()
   slice.scale = 2
@@ -6,5 +6,5 @@ export default function exportImage(document, artboard, callback){
   slice.format = "png"
   document.saveArtboardOrSlice_toFile(slice, filepath)
   console.log(filepath)
-  setTimeout(() => callback(document, artboard, filepath), 500)
+  callback(document, artboard, filepath)
 }

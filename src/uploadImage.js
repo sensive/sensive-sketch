@@ -34,7 +34,7 @@ const sendSnapshot = (imageURL, document, artboard) => {
   }).catch(e => console.log(e))
 }
 
-export default function uploadImage(document, artboard, filepath){
+export function uploadImage(document, artboard, filepath){
   const imageFile = NSData.alloc().initWithContentsOfFile(filepath)
   const imageChanged = () => Settings.documentSettingForKey(document, `SIZE-${artboard.objectID()}`) != imageFile.length()
 
