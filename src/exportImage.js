@@ -1,10 +1,13 @@
-export function exportImage(document, artboard, callback){
-  const filepath = `/tmp/${artboard.objectID()}.png`
-  const slice = MSExportRequest.exportRequestsFromExportableLayer(artboard).firstObject()
-  slice.scale = 2
+export function exportImage(document, object, options){
+  const slice = MSExportRequest.exportRequestsFromExportableLayer(object).firstObject()
+  slice.scale = options.scale
+  slice.format = options.format
   slice.saveForWeb = false
-  slice.format = "png"
-  document.saveArtboardOrSlice_toFile(slice, filepath)
-  console.log(filepath)
-  callback(document, artboard, filepath)
+
+  const path = `/tmp/${document.cloudDocumentKey()}/${object.objectID()}.${options.format}`
+
+  return new Promise(resolve => {
+    document.saveArtboardOrSlice_toFile(slice, path)
+    resolve(path)
+  })
 }

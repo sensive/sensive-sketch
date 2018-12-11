@@ -26,6 +26,7 @@
       "handlers": {
         "actions": {
           "DocumentSaved": "onDocumentSaved",
+          "ArtboardChanged": "onArtboardChanged",
           "OpenDocument": "onOpenDocument"
         }
       }
@@ -49,7 +50,7 @@
       "handler": "privacyPolicyLink"
     }
   ],
-  
+
   "menu": {
     "title": "🛎 Sensive",
     "items": [

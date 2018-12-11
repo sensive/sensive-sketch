@@ -1,25 +1,28 @@
-const Settings = require('sketch/settings')
+import { Settings } from 'sketch'
 import { requireToken } from './setup.js'
-import { exportImage, uploadImage } from './utils.js'
+import { syncArtboards } from './sync'
+import { artboardsFromDocument, notify } from './utils'
+
+const TRACK_DOCUMENT = 'trackDocument'
+
+export function trackingEnabledForDocument(document) {
+  return Settings.documentSettingForKey(document, TRACK_DOCUMENT)
+}
+
+export function requireTrackingEnabled(document, callback) {
+  if (trackingEnabledForDocument(document)) callback()
+}
 
 export function toggleSyncing(context) {
   const { document } = context
-  const tracking = Settings.documentSettingForKey(document, 'trackDocument')
 
-  const toggle = () => {
-    Settings.setDocumentSettingForKey(document, 'trackDocument', !tracking)
-    document.showMessage(`${tracking ? 'Stopped' : 'Started'} syncing changes for ${document.cloudName()}`)
+  requireToken(() => {
+    Settings.setDocumentSettingForKey(document, TRACK_DOCUMENT, !trackingEnabledForDocument(document))
+  })
 
-    if (!tracking) {
-      document.pages().forEach((page) => {
-        page.artboards().forEach((artboard) => {
-          if (artboard.class() != 'MSSymbolMaster') {
-            exportImage(document, artboard, uploadImage)
-          }
-        })
-      })
-    }
+  requireTrackingEnabled(document, () => syncArtboards(artboardsFromDocument(document), document))
+
+  if (!trackingEnabledForDocument(document)) {
+    notify(document, `Stopped syncing changes for ${document.cloudName()}`)
   }
-
-  requireToken(() => toggle())
 }
