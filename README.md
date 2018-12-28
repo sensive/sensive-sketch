@@ -3,7 +3,9 @@
 ## Getting Started
 
 1. `npm i` to install dependencies _and_ to create symlink of plugin file in Sketch directory
+
 2. `npm run watch` for local dev, pair with live reloading setting:
+
     ``` bash
     defaults write ~/Library/Preferences/com.bohemiancoding.sketch3.plist AlwaysReloadScript -bool YES
     ```
