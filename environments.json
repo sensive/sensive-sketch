@@ -1,0 +1,35 @@
+{
+  "development": {
+    "name": "sensive-sketch-development",
+    "skpm": {
+      "name": "<development> Sketch Sync",
+      "main": "sensive-sketch-development.sketchplugin"
+    },
+    "scripts": {
+      "build": "SKPM_ENV=development skpm-build",
+      "watch": "SKPM_ENV=development skpm-build --watch"
+    }
+  },
+  "staging": {
+    "name": "sensive-sketch-staging",
+    "skpm": {
+      "name": "<staging> Sketch Sync",
+      "main": "sensive-sketch-staging.sketchplugin"
+    },
+    "scripts": {
+      "build": "SKPM_ENV=staging skpm-build",
+      "watch": "SKPM_ENV=staging skpm-build --watch"
+    }
+  },
+  "production": {
+    "name": "sensive-sketch",
+    "skpm": {
+      "name": "Sketch Sync",
+      "main": "sensive-sketch.sketchplugin"
+    },
+    "scripts": {
+      "build": "SKPM_ENV=production skpm-build",
+      "watch": "SKPM_ENV=production skpm-build --watch"
+    }
+  }
+}
