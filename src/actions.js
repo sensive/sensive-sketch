@@ -12,7 +12,7 @@ export function onDocumentSaved(context) {
   })
 }
 
-export function onOpenDocument() {
+export function onStartup() {
   if (!Settings.settingForKey('userApplicationToken')){
     setup()
   }

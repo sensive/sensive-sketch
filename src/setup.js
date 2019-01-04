@@ -1,6 +1,7 @@
 import { Settings } from 'sketch'
 import BrowserWindow from 'sketch-module-web-view'
 import openLink from './openLink'
+import { API_URL } from './sensiveAPI'
 
 const windowOptions = {
   width: 800,
@@ -15,19 +16,19 @@ const windowOptions = {
 }
 
 export function setup() {
-  const browserWindow = new BrowserWindow(windowOptions)
+  const { loadURL, webContents } = new BrowserWindow(windowOptions)
 
-  browserWindow.loadURL(`${process.env.SENSIVE_API_URL}/sketch/sign_in`)
+  loadURL(`${API_URL}/sketch/sign_in`)
 
-  browserWindow.webContents.on('openLink', (link) => {
+  webContents.on('openLink', (link) => {
     openLink(link)
   })
 
-  browserWindow.webContents.on('clearToken', () => {
+  webContents.on('clearToken', () => {
     Settings.setSettingForKey('userApplicationToken', null)
   })
 
-  browserWindow.webContents.on('sendToken', (token) => {
+  webContents.on('sendToken', (token) => {
     if (typeof token === 'string') {
       Settings.setSettingForKey('userApplicationToken', token)
     }
@@ -38,14 +39,14 @@ export function requireToken(callback) {
   if (Settings.settingForKey('userApplicationToken')) {
     callback()
   } else {
-    const browserWindow = new BrowserWindow(windowOptions)
+    const { loadURL, webContents, close } = new BrowserWindow(windowOptions)
 
-    browserWindow.loadURL(`${process.env.SENSIVE_API_URL}/sketch/sign_in`)
+    loadURL(`${API_URL}/sketch/sign_in`)
 
-    browserWindow.webContents.on('sendToken', (token) => {
+    webContents.on('sendToken', (token) => {
       if (typeof token === 'string') {
         Settings.setSettingForKey('userApplicationToken', token)
-        browserWindow.close()
+        close()
         callback()
       }
     })

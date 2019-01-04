@@ -1,10 +1,9 @@
 import { Settings } from 'sketch'
 import fetch from 'sketch-polyfill-fetch'
+import { Endpoints, authTokenHeader } from './sensiveAPI'
 
 export function sendSnapshot(snapshot, callback){
-  const artboardName = String(snapshot.artboard.name())
   const artboardUid = String(snapshot.artboard.objectID())
-  const documentName = String(snapshot.document.cloudName().toString())
   const documentUid = String(snapshot.document.cloudDocumentKey())
 
   const image = NSData.alloc().initWithContentsOfFile(snapshot.path)
@@ -13,15 +12,13 @@ export function sendSnapshot(snapshot, callback){
 
   if (imageIsUnchanged()) return callback({ status: 'unchanged' })
 
-  fetch(`${process.env.SENSIVE_API_URL}/api/sketch/v1/snapshots`, {
+  fetch(Endpoints.SNAPSHOTS, {
     method: 'POST',
     headers: {
       'Content-Type': 'image/png',
-      'X-Sketch-Artboard-Name': artboardName,
       'X-Sketch-Artboard-Uid':  artboardUid,
-      'X-Sketch-Document-Name': documentName,
       'X-Sketch-Document-Uid':  documentUid,
-      'X-User-Application-Token': Settings.settingForKey('userApplicationToken'),
+      ...authTokenHeader
     },
     body: image
   }).then(response => {

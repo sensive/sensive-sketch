@@ -1,13 +1,19 @@
-export function exportImage(document, object, options){
-  const slice = MSExportRequest.exportRequestsFromExportableLayer(object).firstObject()
-  slice.scale = options.scale
-  slice.format = options.format
-  slice.saveForWeb = false
+import { documentIdentifier } from "./utils"
 
-  const path = `/tmp/${document.cloudDocumentKey()}/${object.objectID()}.${options.format}`
+const ExportRequest = (object) => {
+  return MSExportRequest.exportRequestsFromExportableLayer(object).firstObject()
+}
+
+export function exportImage(document, object, options){
+  const exportRequest = new ExportRequest(object)
+  exportRequest.scale = options.scale
+  exportRequest.format = options.format
+  exportRequest.saveForWeb = false
+
+  const path = `/tmp/${documentIdentifier(document)}/${options.path}.${options.format}`
 
   return new Promise(resolve => {
-    document.saveArtboardOrSlice_toFile(slice, path)
+    document.saveArtboardOrSlice_toFile(exportRequest, path)
     resolve(path)
   })
 }

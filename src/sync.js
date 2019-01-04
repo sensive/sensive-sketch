@@ -1,4 +1,5 @@
-import { exportImage, sendSnapshot, sendAsset, exportablesFromArtboards, notify } from './utils'
+import { exportImage, sendSnapshot, sendAsset, exportablesFromArtboards, notify, exportableIdentifier, documentSchema } from './utils'
+import { sendDocument } from './sendDocument'
 
 export function syncArtboards(artboards, document) {
   const exportables = exportablesFromArtboards(artboards, document)
@@ -17,7 +18,7 @@ export function syncArtboards(artboards, document) {
         exportImage(
           document,
           artboard,
-          { scale: 2, format: 'png' }
+          { scale: 2, format: 'png', path: artboard.objectID() }
         ).then(path => queueSnapshot({ document, artboard, path }))
       })
 
@@ -62,7 +63,7 @@ export function syncArtboards(artboards, document) {
       exportImage(
         document,
         object,
-        { scale, format }
+        { scale, format, path: exportableIdentifier(exportable) }
       ).then(path => uploadAsset({path, ...exportable}))
     })
   }
@@ -71,5 +72,7 @@ export function syncArtboards(artboards, document) {
     sendAsset(asset, status => console.log(status))
   }
 
-  syncArtboards().then(() => syncExportables())
+  sendDocument(documentSchema(document, artboards))
+    .then(syncArtboards)
+    .then(syncExportables)
 }

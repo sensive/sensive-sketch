@@ -3,9 +3,17 @@ export * from './sendSnapshot'
 export * from './sendAsset'
 export * from './toggleSyncing'
 
-export const objectIsSymbol = (object) => object.class() === 'MSSymbolMaster'
-export const objectIsArtboard = (object) => object.class() === 'MSArtboardGroup'
-export const objectIsGroup = (object) => object.class() === 'MSLayerGroup'
+export const ObjectTypes = {
+  SYMBOL: 'MSSymbolMaster',
+  ARTBOARD: 'MSArtboardGroup',
+  LAYER_GROUP: 'MSLayerGroup',
+}
+
+export const objectType = (object) => String(object.class())
+
+export const objectIsArtboard = (object) => objectType(object) === ObjectTypes.ARTBOARD
+export const objectIsGroup = (object) => objectType(object) === ObjectTypes.LAYER_GROUP
+export const objectIsSymbol = (object) => objectType(object) === ObjectTypes.SYMBOL
 
 export const objectIsContainer = (object) => {
   return objectIsGroup(object) || objectIsArtboard(object)
@@ -15,7 +23,7 @@ export const objectHasExportables = (object) => {
   return object.exportOptions().exportFormats().length > 0
 }
 
-export const exportableFromObject = (object, format) => {
+export const Exportable = (object, format) => {
   return {
     object: object,
     uid: object.objectID(),
@@ -25,6 +33,16 @@ export const exportableFromObject = (object, format) => {
     format: format.fileFormat(),
   }
 }
+
+export const exportableIdentifier = ({ uid, name, suffix, scale } = exportable) => {
+  return `${uid}-${name}-${scale}-${suffix}`
+}
+
+export const documentIdentifier = (document) => String(document.cloudDocumentKey())
+export const documentName = (document) => String(document.cloudName().toString())
+
+export const objectIdentifier = (object) => String(object.objectID())
+export const objectName = (object) => String(object.name())
 
 export const exportablesFromArtboards = (artboards, document) => {
   const exportables = []
@@ -42,7 +60,7 @@ export const exportablesFromObject = (object) => {
 
   if (objectHasExportables(object)) {
     const formats = object.exportOptions().exportFormats()
-    formats.forEach(format => exportables.push(exportableFromObject(object, format)))
+    formats.forEach(format => exportables.push(Exportable(object, format)))
   }
 
   if (objectIsContainer(object)) {
@@ -66,6 +84,23 @@ export const artboardsFromDocument = (document) => {
     })
   })
   return Array.from(artboards)
+}
+
+export const objectSchema = (object) => {
+  return {
+    uid: objectIdentifier(object),
+    name: objectName(object)
+  }
+}
+
+export const documentSchema = (document, artboards) => {
+  return {
+    document: {
+      uid: documentIdentifier(document),
+      name: documentName(document),
+      artboards: artboards.map(objectSchema)
+    }
+  }
 }
 
 export const notify = (document, message) => document.showMessage(message)
