@@ -1,7 +1,10 @@
 # build artifacts
 sensive-sketch.sketchplugin
+sensive-sketch-staging.sketchplugin
+sensive-sketch-development.sketchplugin
 
 # npm
+package.json
 /node_modules
 .npm
 npm-debug.log
@@ -9,6 +12,3 @@ npm-debug.log
 # mac
 .DS_Store
 *.zip
-
-# WebStorm
-.idea

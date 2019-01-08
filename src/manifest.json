@@ -1,8 +1,4 @@
 {
-  "name": "Sketch Sync",
-  "description": "Create a collaboration hub for your Sketch files.",
-  "author": "Sensive",
-  "version": "0.3.2",
   "compatibleVersion": 3,
   "bundleVersion": 1,
   "icon": "icon.png",
@@ -26,7 +22,8 @@
       "handlers": {
         "actions": {
           "DocumentSaved": "onDocumentSaved",
-          "OpenDocument": "onOpenDocument"
+          "ArtboardChanged": "onArtboardChanged",
+          "Startup": "onStartup"
         }
       }
     },
@@ -49,7 +46,7 @@
       "handler": "privacyPolicyLink"
     }
   ],
-  
+
   "menu": {
     "title": "🛎 Sensive",
     "items": [

@@ -1,0 +1,27 @@
+{
+  "version": "0.3.2",
+  "author": "Sensive",
+  "repository": "git@github.com:sensive/sensive-sketch.git",
+  "engines": {
+    "sketch": ">=3.0"
+  },
+  "skpm": {
+    "name": "Sketch Sync",
+    "description": "Create a collaboration hub for your Sketch files.",
+    "manifest": "src/manifest.json",
+    "assets": [
+      "assets/**/*"
+    ]
+  },
+  "devDependencies": {
+    "@skpm/builder": "^0.5.10"
+  },
+  "scripts": {
+    "postinstall": "npm run build && skpm-link"
+  },
+  "dependencies": {
+    "mime-types": "^2.1.21",
+    "sketch-module-web-view": "^1.2.3",
+    "skpm": "^1.1.8"
+  }
+}

@@ -1,24 +1,32 @@
-const Settings = require('sketch/settings')
-import { exportImage, uploadImage } from './utils.js'
-import { setup } from './setup.js'
+import { Settings } from 'sketch'
+import { setup } from './setup'
+import { syncArtboards } from './sync'
+import { requireTrackingEnabled } from './utils'
 
 export function onDocumentSaved(context) {
   const { document } = context.actionContext
-  const tracking = Settings.documentSettingForKey(document, 'trackDocument')
+  const currentArtboard = document.findCurrentArtboardGroup()
 
-  if (tracking) {
-    document.pages().forEach((page) => {
-      page.artboards().forEach((artboard) => {
-        if (artboard.class() != 'MSSymbolMaster') {
-          exportImage(document, artboard, uploadImage)
-        }
-      })
-    })
-  }
+  requireTrackingEnabled(document, () => {
+    if (currentArtboard) syncArtboards([currentArtboard], document)
+  })
 }
-      
-export function onOpenDocument() {
+
+export function onStartup() {
   if (!Settings.settingForKey('userApplicationToken')){
     setup()
   }
+}
+
+export function onArtboardChanged(context) {
+  const { document, oldArtboard, newArtboard } = context.actionContext
+  const artboardUnchanged = () => oldArtboard === newArtboard
+
+  console.log(artboardUnchanged()) // why get error when selecting one artboard at beginning
+
+  requireTrackingEnabled(document, () => {
+    if (artboardUnchanged()) return
+
+    syncArtboards([oldArtboard], document)
+  })
 }

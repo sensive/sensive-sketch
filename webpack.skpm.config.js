@@ -1,9 +1,9 @@
 const webpack = require('webpack')
 
 module.exports = () => {
-  return { 
+  return {
     plugins: [
-      new webpack.EnvironmentPlugin(['SENSIVE_API_URL'])
+      new webpack.EnvironmentPlugin(['SKPM_ENV'])
     ]
   }
 };
