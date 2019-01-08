@@ -1,5 +1,5 @@
 {
-  "version": "0.4.0",
+  "version": "0.3.2",
   "author": "Sensive",
   "repository": "git@github.com:sensive/sensive-sketch.git",
   "engines": {
@@ -11,17 +11,24 @@
     "manifest": "src/manifest.json",
     "assets": [
       "assets/**/*"
-    ]
+    ],
+    "main": "sensive-sketch.sketchplugin"
   },
   "devDependencies": {
     "@skpm/builder": "^0.5.10"
   },
   "scripts": {
-    "postinstall": "npm run build && skpm-link"
+    "postinstall": "npm run build && skpm-link",
+    "build": "SKPM_ENV=production skpm-build",
+    "watch": "SKPM_ENV=production skpm-build --watch"
   },
   "dependencies": {
     "mime-types": "^2.1.21",
     "sketch-module-web-view": "^1.2.3",
     "skpm": "^1.1.10"
+  },
+  "name": "sensive-sketch",
+  "env": {
+    "NODE_ENV": "production"
   }
 }

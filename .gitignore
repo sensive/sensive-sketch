@@ -4,7 +4,6 @@ sensive-sketch-staging.sketchplugin
 sensive-sketch-development.sketchplugin
 
 # npm
-package.json
 /node_modules
 .npm
 npm-debug.log
