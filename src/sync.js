@@ -1,4 +1,4 @@
-import { exportImage, sendSnapshot, sendAsset, exportablesFromArtboards, notify, exportableIdentifier, documentSchema } from './utils'
+import { exportImage, sendSnapshot, sendAsset, exportablesFromArtboards, notify, exportableIdentifier, documentSchema, excludeSymbols } from './utils'
 import { sendDocument } from './sendDocument'
 
 export function syncArtboards(artboards, document) {
@@ -12,9 +12,9 @@ export function syncArtboards(artboards, document) {
   const snapshotProgress = () => `${snapshotStatuses.length}/${snapshots.length}`
   const snapshotsDoneUploading = () => snapshotStatuses.length === snapshots.length
 
-  const syncArtboards = () => {
+  const syncSnapshots = () => {
     return new Promise((resolve) => {
-      artboards.map(artboard => {
+      excludeSymbols(artboards).map(artboard => {
         exportImage(
           document,
           artboard,
@@ -64,7 +64,7 @@ export function syncArtboards(artboards, document) {
         document,
         object,
         { scale, format, path: exportableIdentifier(exportable) }
-      ).then(path => uploadAsset({path, ...exportable}))
+      ).then(path => uploadAsset({ path, ...exportable }))
     })
   }
 
@@ -73,6 +73,6 @@ export function syncArtboards(artboards, document) {
   }
 
   sendDocument(documentSchema(document, artboards))
-    .then(syncArtboards)
+    .then(syncSnapshots)
     .then(syncExportables)
 }

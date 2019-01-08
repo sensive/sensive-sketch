@@ -9,7 +9,6 @@ export function sendSnapshot(snapshot, callback){
   const image = NSData.alloc().initWithContentsOfFile(snapshot.path)
   const imageIsUnchanged = () => Settings.documentSettingForKey(snapshot.document, `SIZE-${snapshot.artboard.objectID()}`) === image.length()
 
-
   if (imageIsUnchanged()) return callback({ status: 'unchanged' })
 
   fetch(Endpoints.SNAPSHOTS, {

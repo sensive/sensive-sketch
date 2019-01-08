@@ -26,11 +26,11 @@ export const objectHasExportables = (object) => {
 export const Exportable = (object, format) => {
   return {
     object: object,
-    uid: object.objectID(),
-    name: object.name(),
-    suffix: format.name(),
-    scale: format.scale(),
-    format: format.fileFormat(),
+    uid:    String(object.objectID()),
+    name:   String(object.name()),
+    suffix: format.name() ? String(format.name()) : '',
+    scale:  String(format.scale()),
+    format: String(format.fileFormat()),
   }
 }
 
@@ -48,7 +48,7 @@ export const exportablesFromArtboards = (artboards, document) => {
   const exportables = []
   artboards.forEach(artboard => {
     exportables.push(
-      exportablesFromObject(artboard).map(exportable => ({...exportable, artboard: artboard, document: document }))
+      exportablesFromObject(artboard).map(exportable => ({ document, artboard, ...exportable }))
     )
   })
 
@@ -78,12 +78,16 @@ export const artboardsFromDocument = (document) => {
   const artboards = []
   document.pages().forEach(page => {
     page.artboards().forEach(artboard => {
-      if (objectIsSymbol(artboard)) return
+      if (objectIsSymbol(artboard)) { return }
 
       artboards.push(artboard)
     })
   })
   return Array.from(artboards)
+}
+
+export const excludeSymbols = (artboards) => {
+  return artboards.filter(artboard => !objectIsSymbol(artboard))
 }
 
 export const objectSchema = (object) => {
@@ -98,7 +102,7 @@ export const documentSchema = (document, artboards) => {
     document: {
       uid: documentIdentifier(document),
       name: documentName(document),
-      artboards: artboards.map(objectSchema)
+      artboards: excludeSymbols(artboards).map(objectSchema)
     }
   }
 }
