@@ -1,4 +1,5 @@
-import { Settings } from 'sketch'
+import * as pkg from '../package.json'
+import { Settings, version } from 'sketch'
 
 const API_URL_BASE = {
   'development': 'http://localhost:5000',
@@ -16,6 +17,8 @@ export const Endpoints = {
 
 export const authTokenHeader = {
   'X-User-Application-Token': Settings.settingForKey('userApplicationToken'),
+  'X-Sketch-Plugin-Version': pkg.version,
+  'X-Sketch-App-Version': version.sketch,
 }
 
 export const Schema = (schema) => JSON.stringify(schema)
