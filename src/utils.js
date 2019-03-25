@@ -1,3 +1,5 @@
+import { fromNative } from 'sketch'
+
 export * from './exportImage'
 export * from './sendSnapshot'
 export * from './sendAsset'
@@ -40,6 +42,7 @@ export const exportableIdentifier = ({ uid, name, suffix, scale } = exportable) 
 
 export const documentIdentifier = (document) => String(document.cloudDocumentKey())
 export const documentName = (document) => String(document.cloudName().toString())
+export const documentPath = (document) => String(fromNative(document).path)
 
 export const objectIdentifier = (object) => String(object.objectID())
 export const objectName = (object) => String(object.name())
@@ -102,6 +105,7 @@ export const documentSchema = (document, artboards) => {
     document: {
       uid: documentIdentifier(document),
       name: documentName(document),
+      path: documentPath(document),
       artboards: excludeSymbols(artboards).map(objectSchema)
     }
   }
