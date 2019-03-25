@@ -12,6 +12,13 @@
       "handler": "toggleSyncing"
     },
     {
+      "name": "Toggle Panel",
+      "shortcut": "ctrl h",
+      "script": "togglePanel.js",
+      "identifier": "togglePanel",
+      "handler": "togglePanel"
+    },
+    {
       "name": "Your Account",
       "script": "setup.js",
       "identifier": "setup",
@@ -21,9 +28,13 @@
       "script": "actions.js",
       "handlers": {
         "actions": {
+          "Startup": "onStartup",
+          "OpenDocument": "onOpenDocument",
+          "CloseDocument": "onCloseDocument",
           "DocumentSaved": "onDocumentSaved",
           "ArtboardChanged": "onArtboardChanged",
-          "Startup": "onStartup"
+          "SelectionChanged": "onSelectionChanged",
+          "ToggleInspectorVisibility": "onToggleInspectorVisibility"
         }
       }
     },
@@ -51,6 +62,7 @@
     "title": "🛎 Sensive",
     "items": [
       "toggleSyncing",
+      "togglePanel",
       "-",
       "setup",
       {

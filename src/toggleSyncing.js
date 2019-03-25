@@ -1,5 +1,5 @@
 import { Settings } from 'sketch'
-import { requireToken } from './setup.js'
+import { requireToken, setStatusPanel } from './setup.js'
 import { syncArtboards } from './sync'
 import { artboardsFromDocument, notify } from './utils'
 
@@ -13,11 +13,12 @@ export function requireTrackingEnabled(document, callback) {
   if (trackingEnabledForDocument(document)) callback()
 }
 
-export function toggleSyncing(context) {
-  const { document } = context
+export const toggleSyncing = context => toggleSyncingForDocument(context.document)
 
+export function toggleSyncingForDocument(document) {
   requireToken(() => {
     Settings.setDocumentSettingForKey(document, TRACK_DOCUMENT, !trackingEnabledForDocument(document))
+    setStatusPanel(document)
   })
 
   requireTrackingEnabled(document, () => syncArtboards(artboardsFromDocument(document), document))
