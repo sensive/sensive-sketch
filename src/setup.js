@@ -98,7 +98,7 @@ export function setStatusPanel (document) {
     return
   }
 
-  createPanel(document)
+  updatePanel(createPanel(document), document)
 }
 
 // Less likely for this version
@@ -147,6 +147,8 @@ function createPanel (document) {
 
   panel.webContents.on('enableSyncing', handleEnableSyncing)
   panel.webContents.on('openLink', (link) => { openLink(API_URL + link) })
+
+  return panel
 }
 
 function setPanelState (panel, document) {
