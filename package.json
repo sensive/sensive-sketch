@@ -6,29 +6,29 @@
     "sketch": ">=3.0"
   },
   "skpm": {
-    "name": "<development> Sketch Sync",
+    "name": "Sketch Sync",
     "description": "Create a collaboration hub for your Sketch files.",
     "manifest": "src/manifest.json",
     "assets": [
       "assets/**/*"
     ],
-    "main": "sensive-sketch-development.sketchplugin"
+    "main": "sensive-sketch.sketchplugin"
   },
   "devDependencies": {
     "@skpm/builder": "^0.5.10"
   },
   "scripts": {
     "postinstall": "npm run build && skpm-link",
-    "build": "SKPM_ENV=development skpm-build",
-    "watch": "SKPM_ENV=development skpm-build --watch"
+    "build": "SKPM_ENV=production skpm-build",
+    "watch": "SKPM_ENV=production skpm-build --watch"
   },
   "dependencies": {
     "mime-types": "^2.1.21",
     "sketch-module-web-view": "3.0.0",
-    "skpm": "^1.1.10"
+    "skpm": "^1.1.15"
   },
-  "name": "sensive-sketch-development",
+  "name": "sensive-sketch",
   "env": {
-    "NODE_ENV": "development"
+    "NODE_ENV": "production"
   }
 }
