@@ -26,6 +26,5 @@
 
 ## Publishing
 
-1. Change version in `.package.json` (NOT `package.json`, as it’s ignored from version control)
-2. Run `penv production` to generate the correct `package.json`
-3. Use `skpm publish -h` to determine what options to use to match the new version
+1. Run `penv production` to generate the correct `package.json`
+2. Use `skpm publish -h` to determine what options to use to match the new version
