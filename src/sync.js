@@ -1,4 +1,13 @@
-import { exportImage, sendSnapshot, sendAsset, exportablesFromArtboards, notify, exportableIdentifier, documentSchema, excludeSymbols } from './utils'
+import {
+  documentSchema,
+  excludeSymbols,
+  exportableIdentifier,
+  exportablesFromArtboards,
+  exportImage,
+  notify,
+  sendAsset,
+  sendSnapshot,
+} from './utils'
 import { sendDocument } from './sendDocument'
 
 export function syncArtboards(artboards, document) {
@@ -72,7 +81,7 @@ export function syncArtboards(artboards, document) {
     sendAsset(asset, status => console.log(status))
   }
 
-  sendDocument(documentSchema(document, artboards))
+  return sendDocument(documentSchema(document, artboards))
     .then(syncSnapshots)
     .then(syncExportables)
 }

@@ -28,3 +28,10 @@
 
 1. Run `penv production` to generate the correct `package.json`
 2. Use `skpm publish -h` to determine what options to use to match the new version
+
+## Also Useful
+
+* Auto-refresh plugin when compiling:
+  ```
+    defaults write com.bohemiancoding.sketch3   AlwaysReloadScript -bool YES
+  ```
