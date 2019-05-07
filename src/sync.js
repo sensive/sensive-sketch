@@ -1,4 +1,13 @@
-import { exportImage, sendSnapshot, sendAsset, exportablesFromArtboards, notify, exportableIdentifier, documentSchema, excludeSymbols } from './utils'
+import {
+  documentSchema,
+  excludeSymbols,
+  exportableIdentifier,
+  exportablesFromArtboards,
+  exportImage,
+  notify,
+  sendAsset,
+  sendSnapshot,
+} from './utils'
 import { sendDocument } from './sendDocument'
 
 export function syncArtboards(artboards, document) {
@@ -6,10 +15,7 @@ export function syncArtboards(artboards, document) {
   const snapshots = []
   const snapshotStatuses = []
 
-  const progress = () => `${snapshots.length}/${artboards.length}`
   const artboardsDoneExporting = () => artboards.length === snapshots.length
-
-  const snapshotProgress = () => `${snapshotStatuses.length}/${snapshots.length}`
   const snapshotsDoneUploading = () => snapshotStatuses.length === snapshots.length
 
   const syncSnapshots = () => {
@@ -53,8 +59,8 @@ export function syncArtboards(artboards, document) {
     }
   }
 
-  const showMessageArtboardsProgress = () => notify(document, `Generating snapshots… (${progress()})`)
-  const showMessageSnapshotsProgress = () => notify(document, `Uploading… (${snapshotProgress()})`)
+  const showMessageArtboardsProgress = () => notify(document, `Generating snapshots…`)
+  const showMessageSnapshotsProgress = () => notify(document, `Uploading…`)
   const showMessageDone = () => notify(document, `All up-to-date! 👌`)
 
   const syncExportables = () => {
@@ -72,7 +78,7 @@ export function syncArtboards(artboards, document) {
     sendAsset(asset, status => console.log(status))
   }
 
-  sendDocument(documentSchema(document, artboards))
+  return sendDocument(documentSchema(document, artboards))
     .then(syncSnapshots)
     .then(syncExportables)
 }

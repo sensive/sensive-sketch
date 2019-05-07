@@ -1,17 +1,28 @@
 import { Settings } from 'sketch'
+import * as R from 'rambda'
 
 import { Document } from 'sketch/dom'
 import { setup, setStatusPanel } from './setup'
 import { syncArtboards } from './sync'
-import { requireTrackingEnabled } from './utils'
+import { requireTrackingEnabled, objectIdentifier } from './utils'
 
 export function onDocumentSaved(context) {
   const { document } = context.actionContext
-  const currentArtboard = document.findCurrentArtboardGroup()
 
   requireTrackingEnabled(document, () => {
-    if (currentArtboard) syncArtboards([currentArtboard], document)
+    const touchedArtboardIds = R.uniq(Settings.sessionVariable('touchedArtboardIds') || [])
+
+    if (!touchedArtboardIds.length) { return }
+
+    touchedArtboardIds.reduce((promise, id) => {
+      const artboard = Document.getSelectedDocument().getLayerWithID(id).sketchObject
+
+      return promise.then(() => artboard ? syncArtboards([artboard], document) : '')
+
+    }, Promise.resolve())
   })
+
+  Settings.setSessionVariable('touchedArtboardIds', [])
 
   setStatusPanel(document)
 }
@@ -35,15 +46,10 @@ export function setStatusPanelWithCurrentDocument() {
 }
 
 export function onArtboardChanged(context) {
-  const { document, oldArtboard, newArtboard } = context.actionContext
-  const artboardUnchanged = () => oldArtboard === newArtboard
+  const { newArtboard } = context.actionContext
 
-  // TODO: fix error when selecting one artboard at beginning
-  console.log(artboardUnchanged())
-
-  requireTrackingEnabled(document, () => {
-    if (artboardUnchanged()) return
-
-    syncArtboards([oldArtboard], document)
-  })
+  Settings.setSessionVariable('touchedArtboardIds', [
+    objectIdentifier(newArtboard),
+    ...(Settings.sessionVariable('touchedArtboardIds') || []),
+  ])
 }
