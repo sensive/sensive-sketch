@@ -31,7 +31,7 @@
 
 ## Also Useful
 
-* Auto-refresh plugin when compiling:
+* Prevent plugins from being disabled when Sketch crashes (use with caution 😉):
   ```
-    defaults write com.bohemiancoding.sketch3   AlwaysReloadScript -bool YES
+    defaults write com.bohemiancoding.sketch3.beta disableAutomaticSafeMode true
   ```
