@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "mime-types": "^2.1.21",
-    "sketch-module-web-view": "3.0.0",
+    "sketch-module-web-view": "3.3.0",
     "skpm": "^1.1.10",
     "rambda": "2.5.0"
   }
