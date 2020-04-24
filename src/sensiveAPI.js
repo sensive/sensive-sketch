@@ -4,7 +4,7 @@ import { Settings, version } from 'sketch'
 const API_URL_BASE = {
   'development': 'http://localhost:5000',
   'staging':     'https://staging.sensive.co',
-  'production':  'https://sensive.co',
+  'production':  'https://app.sensive.co',
 }
 
 export const API_URL = API_URL_BASE[process.env.SKPM_ENV]
